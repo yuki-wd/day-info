@@ -1,26 +1,37 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import styled from '@emotion/styled';
+import Time from './components/Time';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <CenteredItem>
+        <HHMM format={'HH:mm'} interval={500} />
+        <SS format={':ss'} interval={500} />
+      </CenteredItem>
+    </Container>
   );
-}
+};
 
 export default App;
+
+const Container = styled.div({
+  display: 'flex',
+  justifyContent: 'center',
+  flexDirection: 'column',
+  height: '100%',
+});
+
+const CenteredItem = styled.div({
+  margin: 'auto',
+  fontFamily: "'Roboto', sans-serif",
+});
+
+const HHMM = styled(Time)({
+  fontSize: 80,
+});
+
+const SS = styled(Time)({
+  color: '#9e9e9e',
+  fontSize: 50,
+});
