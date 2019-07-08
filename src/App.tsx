@@ -1,13 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import Time from './components/Time';
+import Weather from './components/Weather';
 
 const App: React.FC = () => {
+  const [coordinates, setCoodinates] = useState<Coordinates | null>(null);
+  useEffect(() => {
+    if (!coordinates) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const { coords } = position;
+        setCoodinates(coords);
+      });
+    }
+  }, [coordinates]);
+  console.log(coordinates);
   return (
     <Container>
-      <CenteredItem>
+      <CenteredItem style={{ marginRight: 20, marginBottom: 0 }}>
         <HHMM format={'HH:mm'} interval={500} />
         <SS format={':ss'} interval={500} />
+      </CenteredItem>
+      <CenteredItem style={{ marginRight: 20, marginTop: 20 }}>
+        {coordinates && (
+          <>
+            <Weather lat={coordinates.latitude} lng={coordinates.longitude} />
+          </>
+        )}
       </CenteredItem>
     </Container>
   );
@@ -20,6 +38,7 @@ const Container = styled.div({
   justifyContent: 'center',
   flexDirection: 'column',
   height: '100%',
+  alignItems: 'baseline',
 });
 
 const CenteredItem = styled.div({
@@ -28,10 +47,10 @@ const CenteredItem = styled.div({
 });
 
 const HHMM = styled(Time)({
-  fontSize: 80,
+  fontSize: 100,
 });
 
 const SS = styled(Time)({
   color: '#9e9e9e',
-  fontSize: 50,
+  fontSize: 60,
 });
