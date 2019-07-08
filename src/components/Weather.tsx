@@ -10,22 +10,24 @@ interface WeatherProps {
 
 const Weather: React.FC<WeatherProps> = ({ lat, lng }) => {
   const [weather, setWeather] = useState('');
+  const [temperature, setTemperature] = useState<number | null>(null);
   useEffect(() => {
     const getWeather = async (lat: number, lng: number) => {
       const result = await requestGetCurrentlyWeather(lat, lng);
       setWeather(result.icon);
+      setTemperature(Math.round(result.temperature));
     };
-    if (weather === '') {
+    if (weather === '' && temperature === null) {
       getWeather(lat, lng);
     }
-  }, [weather, lat, lng]);
+  }, [weather, lat, lng, temperature]);
   return (
     <>
       <i
         className={`wi ${getWeatherIcon(weather as WeatherIcon)}`}
-        style={{ fontSize: 50 }}
+        style={{ fontSize: 50, marginRight: 16 }}
       />
-      <span style={{ fontSize: 60 }}>17°</span>
+      <span style={{ fontSize: 60 }}>{temperature}°</span>
     </>
   );
 };
