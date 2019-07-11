@@ -13,7 +13,6 @@ const App: React.FC = () => {
       });
     }
   }, [coordinates]);
-  console.log(coordinates);
   return (
     <Container>
       <CenteredItem style={{ marginRight: 20, marginBottom: 0 }}>
