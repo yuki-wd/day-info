@@ -3,6 +3,7 @@ import { requestGetCurrentlyWeather } from '../utils/api';
 import getWeatherIcon from '../utils/getWeatherIcon';
 import { WeatherIcon } from '../types';
 import moment from 'moment';
+import { useInterval } from '../hooks';
 
 interface WeatherProps {
   lat: number;
@@ -12,7 +13,7 @@ interface WeatherProps {
 interface WeatherInfo {
   weather: string;
   temperature: number;
-  lastUpdateTime: string;
+  lastUpdateTime: moment.Moment;
   loaded: boolean;
 }
 
@@ -20,35 +21,39 @@ const Weather: React.FC<WeatherProps> = ({ lat, lng }) => {
   const [weatherInfo, setWeatherInfo] = useState<WeatherInfo>({
     weather: '',
     temperature: 0,
-    lastUpdateTime: moment().toISOString(),
+    lastUpdateTime: moment(),
     loaded: false,
   });
+
+  async function getWeather(lat: number, lng: number) {
+    const result = await requestGetCurrentlyWeather(lat, lng);
+    setWeatherInfo({
+      weather: result.icon,
+      temperature: result.temperature,
+      lastUpdateTime: moment(),
+      loaded: true,
+    });
+  }
+
   useEffect(() => {
-    const getWeather = async (lat: number, lng: number) => {
-      const result = await requestGetCurrentlyWeather(lat, lng);
-      setWeatherInfo({
-        weather: result.icon,
-        temperature: result.temperature,
-        lastUpdateTime: moment().toISOString(),
-        loaded: true,
-      });
-    };
     if (!weatherInfo.loaded) {
       getWeather(lat, lng);
-    } else {
-      const tid = setInterval(() => {
-        const now = moment();
-        if (
-          moment(weatherInfo.lastUpdateTime)
-            .add(30, 'minutes')
-            .isBefore(now)
-        ) {
-          getWeather(lat, lng);
-        }
-      }, 10000);
-      return () => clearInterval(tid);
     }
-  }, [lat, lng, weatherInfo]);
+  }, [lat, lng, weatherInfo.loaded]);
+
+  useInterval(() => {
+    const now = moment();
+    if (
+      weatherInfo &&
+      weatherInfo.lastUpdateTime
+        .clone()
+        .add(5, 'seconds')
+        .isBefore(now)
+    ) {
+      getWeather(lat, lng);
+    }
+  }, 1000);
+
   return (
     <>
       <i
