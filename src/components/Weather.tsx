@@ -49,12 +49,12 @@ const Weather: React.FC<WeatherProps> = ({ lat, lng }) => {
       weatherInfo &&
       weatherInfo.lastUpdateTime
         .clone()
-        .add(5, 'seconds')
+        .add(30, 'minutes')
         .isBefore(now)
     ) {
       getWeather(lat, lng);
     }
-  }, 1000);
+  }, 10000);
 
   return (
     <>
