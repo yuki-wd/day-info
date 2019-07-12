@@ -27,12 +27,14 @@ const Weather: React.FC<WeatherProps> = ({ lat, lng }) => {
 
   async function getWeather(lat: number, lng: number) {
     const result = await requestGetCurrentlyWeather(lat, lng);
-    setWeatherInfo({
-      weather: result.icon,
-      temperature: result.temperature,
-      lastUpdateTime: moment(),
-      loaded: true,
-    });
+    if (result !== null) {
+      setWeatherInfo({
+        weather: result.icon,
+        temperature: result.temperature,
+        lastUpdateTime: moment(),
+        loaded: true,
+      });
+    }
   }
 
   useEffect(() => {
