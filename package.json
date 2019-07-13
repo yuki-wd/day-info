@@ -9,11 +9,14 @@
     "@types/node": "12.0.12",
     "@types/react": "16.8.23",
     "@types/react-dom": "16.8.4",
+    "@types/react-toggle": "^4.0.2",
     "emotion": "^10.0.14",
+    "emotion-theming": "^10.0.14",
     "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
+    "react-toggle": "^4.0.2",
     "typescript": "3.5.2"
   },
   "scripts": {

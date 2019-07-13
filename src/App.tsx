@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import styled from '@emotion/styled';
 import Time from './components/Time';
 import Weather from './components/Weather';
+import { useTheme } from './utils/themeContext';
+import styled from './utils/styled';
+import Toggle from 'react-toggle';
+import 'react-toggle/style.css';
+import './App.css';
 
 const App: React.FC = () => {
   const [coordinates, setCoodinates] = useState<Coordinates | null>(null);
+  const { colorMode, setColorMode } = useTheme();
   useEffect(() => {
     if (!coordinates) {
       navigator.geolocation.getCurrentPosition(position => {
@@ -26,23 +31,50 @@ const App: React.FC = () => {
           </>
         )}
       </CenteredItem>
+      <BottomItem>
+        <Toggle
+          className={colorMode}
+          checked={colorMode === 'light'}
+          onChange={setColorMode}
+          icons={{
+            checked: (
+              <span role="img" aria-label="dark">
+                🌔
+              </span>
+            ),
+            unchecked: (
+              <span role="img" aria-label="light">
+                🌞️
+              </span>
+            ),
+          }}
+        />
+      </BottomItem>
     </Container>
   );
 };
 
 export default App;
 
-const Container = styled.div({
+const Container = styled.div(({ theme }) => ({
   display: 'flex',
   justifyContent: 'center',
   flexDirection: 'column',
   height: '100%',
   alignItems: 'baseline',
-});
+  background: theme.background,
+  color: theme.color,
+}));
 
 const CenteredItem = styled.div({
   margin: 'auto',
   fontFamily: "'Roboto', sans-serif",
+});
+
+const BottomItem = styled.div({
+  marginBottom: 16,
+  marginLeft: 'auto',
+  marginRight: 16,
 });
 
 const HHMM = styled(Time)({

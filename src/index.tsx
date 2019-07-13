@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { Global, css } from '@emotion/core';
+import ThemeProvider from './components/ThemeProvider';
 
 ReactDOM.render(
-  <>
+  <ThemeProvider>
     <Global
       styles={css`
         body {
@@ -19,7 +20,7 @@ ReactDOM.render(
       `}
     />
     <App />
-  </>,
+  </ThemeProvider>,
   document.getElementById('root')
 );
 
