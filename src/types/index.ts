@@ -38,3 +38,15 @@ export type WeatherIcon =
   | 'cloudy'
   | 'partly-cloudy-day'
   | 'partly-cloudy-night';
+
+export type ColorMode = 'light' | 'dark';
+
+export interface ThemeContextType {
+  colorMode: ColorMode;
+  setColorMode: () => void;
+}
+
+export interface Theme {
+  background: string;
+  color: string;
+}
